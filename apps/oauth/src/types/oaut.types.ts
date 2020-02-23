@@ -5,4 +5,5 @@ export type scopes =
   | 'https://purl.imsglobal.org/spec/ob/v2p1/scope/assertion.create'
   | 'https://purl.imsglobal.org/spec/ob/v2p1/scope/profile.readonly'
   | 'https://purl.imsglobal.org/spec/ob/v2p1/scope/profile.update'
-  | 'offline_access';
+  | 'offline_access'
+  | 'email';

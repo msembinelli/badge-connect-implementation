@@ -2,6 +2,7 @@ import assert from 'assert';
 import Provider from 'oidc-provider';
 import MongoAdapter from '../adapters/mongodb';
 import { Account } from './../services/account.service';
+import querystring from 'querystring';
 
 // TODO turn the following into environment variables
 // TODO add jsonWebKeys as a string in environment variables
@@ -16,7 +17,7 @@ assert.equal(
 const oidc = new Provider(process.env.BASE_URL, {
   adapter: MongoAdapter, // the adapter to use later on ,
   clientDefaults: {
-    grant_types: ['authorization_code', 'refresh_token'], // , 'refresh_token'
+    grant_types: ['authorization_code'], // , 'refresh_token'
     response_types: ['code'],
     token_endpoint_auth_method: 'client_secret_basic'
   },
@@ -41,12 +42,7 @@ const oidc = new Provider(process.env.BASE_URL, {
     email: ['email', 'email_verified'],
     openid: ['sub']
   },
-  scopes: [
-    'openid',
-    'profile',
-    'https://purl.imsglobal.org/spec/ob/v2p1/scope/assertion.readonly',
-    'offline_access'
-  ],
+  scopes: ['openid'],
 
   // let's tell oidc-provider where our own interactions will be
   // setting a nested route is just good practice so that users
@@ -84,6 +80,11 @@ const oidc = new Provider(process.env.BASE_URL, {
       'client_uri',
       'client_name'
     ]
+  },
+  cookies: {
+    long: { signed: false, maxAge: 1 * 24 * 60 * 60 * 1000 }, // 1 day in ms
+    short: { path: '/' },
+    keys: process.env.SECURE_KEY.split(',')
   }
 });
 
@@ -95,37 +96,51 @@ export const callback = oidc.callback;
 export const startInteraction = async (req, res, next) => {
   try {
     // tslint:disable-next-line: no-console
-    const details = await oidc.interactionDetails(req, res);
-    console.log(
-      'see what else is available to you for interaction views',
-      details
-    );
-    const { uid, prompt, params } = details;
+    console.log(req.query);
+    const interaction = await oidc.interactionDetails(req, res);
+    console.log(interaction);
 
-    const client = await oidc.Client.find(params.client_id);
+    const params = {
+      ...interaction.params,
+      client_id: '4id4Td92AMTBr9Bs1wTLJvCSgEtczxzw',
+      redirect_uri: 'http://localhost:5000/restore'
+    };
 
     console.log(params);
 
-    if (prompt.name === 'login') {
-      return res.render('login', {
+    if (req.query.code && req.query.state) {
+      /*return res.render('login', {
         client,
         details: prompt.details,
         flash: undefined,
         params,
         title: 'Sign-in',
         uid
+      });*/
+
+      res.redirect(
+        `${interaction.params.redirect_uri}?${querystring.stringify(req.query)}`
+      );
+
+      await oidc.interactionFinished(req, res, req.query, {
+        mergeWithLastSubmission: true
       });
     }
 
-    console.log('Client :: ', JSON.stringify(client, null, 2));
+    res.redirect(
+      'https://atbinnovation.auth0.com/authorize?' +
+        querystring.stringify(params)
+    );
 
-    return res.render('interaction', {
-      client,
-      details: prompt.details,
-      params,
-      title: 'Authorize',
-      uid
-    });
+    // console.log('Client :: ', JSON.stringify(client, null, 2));
+
+    // return res.render('interaction', {
+    //   client,
+    //   details: prompt.details,
+    //   params,
+    //   title: 'Authorize',
+    //   uid
+    // });
   } catch (err) {
     console.error(err);
     return next(err);

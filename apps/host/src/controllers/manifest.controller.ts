@@ -16,10 +16,7 @@ const {
 } = process.env;
 
 export const wellKnown = (req: Request, res: Response) => {
-  const scopes: scope[] = [
-    'https://purl.imsglobal.org/spec/ob/v2p1/scope/assertion.readonly',
-    'offline_access'
-  ];
+  const scopes: scope[] = [];
   const { host } = req.headers;
   const { secure } = req;
   res.json({

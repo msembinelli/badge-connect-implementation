@@ -25,6 +25,8 @@ RUN npm run build
 # Add static files
 RUN npm run copy-static-assets
 
+EXPOSE 9000
+
 # Run the web service on container startup.
 CMD [ "npm", "start" ]
 

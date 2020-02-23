@@ -30,15 +30,15 @@ export const callback = async (req: any, res: Response, next) => {
 
     // get the request params for use with the callback
     const params = client.callbackParams(req);
+    console.log(params);
 
     console.log('getting state from the db');
 
-    const { code_verifier, uid } = await getOneWhere(
-      { state: params.state },
-      'state'
-    );
+    const response = await getOneWhere({ state: params.state }, 'state');
+    console.log(response);
+    const { code_verifier, uid } = response;
 
-    console.log(code_verifier, uid, redirect_uri);
+    console.log(code_verifier, uid, redirect_uri, params);
 
     console.log('executing callback flow ');
     // get the access_token

@@ -5,7 +5,7 @@ export const clientInfo = {
   id: 'Og-ZMkFakkwvPjg5QXHRd',
   payload: {
     application_type: 'web',
-    grant_types: ['authorization_code', 'refresh_token', 'implicit'],
+    grant_types: ['authorization_code'],
     id_token_signed_response_alg: 'RS256',
     post_logout_redirect_uris: [],
     require_auth_time: false,
@@ -26,8 +26,7 @@ export const clientInfo = {
     logo_uri: 'https://about.badgewell.com',
     policy_uri: 'https://about.badgewell.com',
     redirect_uris: ['https://about.badgewell.com'],
-    scope:
-      'openid profile https://purl.imsglobal.org/spec/ob/v2p1/scope/assertion.readonly',
+    scope: 'openid profile email',
     tos_uri: 'https://about.badgewell.com'
   }
 };

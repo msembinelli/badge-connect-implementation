@@ -1,10 +1,11 @@
-import { MongoClient } from 'mongodb';
-const ObjectId = require('mongodb').ObjectID;
+import { MongoClient, ObjectID } from 'mongodb';
+const ObjectId = ObjectID;
 
 export const dbConnection = async () => {
   const connection = await MongoClient.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true
   });
+  console.log('connected to DB');
   return connection.db(process.env.DATABASE_NAME);
 };
 

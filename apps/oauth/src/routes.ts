@@ -13,14 +13,26 @@ function setNoCache(req, res, next) {
 }
 
 router.get('/health', (req, res) => {
-    res.status(200).send('OK');
+  res.status(200).send('OK');
 });
 
 router.get('/interaction/:uid', setNoCache, oauthController.startInteraction);
 
-router.post('/interaction/:uid/login', setNoCache, parse, oauthController.login );
+router.get('/restore', setNoCache, oauthController.startInteraction);
 
-router.post('/interaction/:uid/confirm', setNoCache, parse, oauthController.confirm);
+router.post(
+  '/interaction/:uid/login',
+  setNoCache,
+  parse,
+  oauthController.login
+);
+
+router.post(
+  '/interaction/:uid/confirm',
+  setNoCache,
+  parse,
+  oauthController.confirm
+);
 
 router.get('/interaction/:uid/abort', setNoCache, oauthController.abort);
 
