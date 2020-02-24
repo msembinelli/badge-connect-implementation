@@ -18,11 +18,12 @@ export const checkAccessToken = async (req: any, res: Response, next) => {
       });
     } else {
       const token = authHeader.split(' ')[1];
+      console.log(token);
       console.log('getting the  access token back from the db');
       const accessToken = await access_token.findOne({
         id: token
       });
-      console.log(accessToken);
+      //  console.log(accessToken);
 
       if (!accessToken) {
         res.status(401).send({

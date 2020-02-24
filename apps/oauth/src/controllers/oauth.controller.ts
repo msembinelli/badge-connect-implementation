@@ -32,7 +32,8 @@ export const provider = async () => {
       introspection: { enabled: true },
       registration: { enabled: true },
       registrationManagement: { enabled: true },
-      revocation: { enabled: true }
+      revocation: { enabled: true },
+      userinfo: { enabled: true }
     },
     // passing it our Account model method is sufficient, it should return a Promise that resolves
     // with an object with accountId property and a claims method.
@@ -42,7 +43,8 @@ export const provider = async () => {
     // email_verified claims
     claims: {
       email: ['email', 'email_verified'],
-      openid: ['sub']
+      openid: ['sub'],
+      profile: ['name', 'picture', 'updated_at']
     },
     scopes: ['openid', 'email', 'profile'],
 
@@ -80,7 +82,8 @@ export const provider = async () => {
         'policy_uri',
         'logo_uri',
         'client_uri',
-        'client_name'
+        'client_name',
+        'userinfo_endpoint'
       ]
     },
     cookies: {

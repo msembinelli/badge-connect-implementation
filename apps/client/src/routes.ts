@@ -12,7 +12,7 @@ router.post('/register', registerController.register);
 router.get(
   '/callback/:id',
   callbackController.callback,
-  callbackController.getAssertions,
+  callbackController.createConsent,
   callbackController.redirect
 );
 router.get(

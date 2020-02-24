@@ -20,10 +20,9 @@ export class Account {
         sub: this.accountId, // it is essential to always return a sub claim
         email: this.profile.email,
         email_verified: this.profile.email_verified,
-        family_name: this.profile.family_name,
-        given_name: this.profile.given_name,
-        locale: this.profile.locale,
-        name: this.profile.name
+        name: this.profile.name,
+        picture: this.profile.picture,
+        updated_at: this.profile.updated_at
       };
     }
 

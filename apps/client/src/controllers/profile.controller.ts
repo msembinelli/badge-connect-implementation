@@ -13,7 +13,7 @@ custom.setHttpOptionsDefaults({
 export const get = async (req: Request & { response: any }, res, next) => {
   const { id: uid } = req.params;
   const [assertions, profile, clients, wellKnows] = await Promise.all([
-    getWhere({ uid: uid }, 'assertions'),
+    getWhere({ uid: uid }, 'consents'),
     getOneWhere({ id: uid }, 'profiles'),
     getWhere({}, 'clients'),
     getWhere({}, 'wellKnows')
@@ -75,10 +75,10 @@ export const generate = async (req, res) => {
   try {
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
+    const name = `${firstName} ${lastName}`;
 
     const profile: IProfile = {
-      firstName,
-      lastName,
+      name,
       photo: faker.image.avatar(),
       jobTitle: faker.name.jobTitle(),
       password: faker.internet.password(),

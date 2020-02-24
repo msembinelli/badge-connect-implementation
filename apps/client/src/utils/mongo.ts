@@ -17,7 +17,7 @@ export type collection =
   | 'accessTokens'
   | 'state'
   | 'profiles'
-  | 'assertions';
+  | 'consents';
 /**
  * Save the object to the database
  *
@@ -34,6 +34,18 @@ export const saveDB = async (data, collection: collection) => {
     // tslint:disable-next-line:no-console
     console.error(err);
     throw new Error('can not write on the database');
+  }
+};
+
+export const removeOne = async (data, collection: collection) => {
+  try {
+    const db = await dbConnection();
+    const response = await db.collection(collection).deleteOne(data);
+    return response;
+  } catch (err) {
+    // tslint:disable-next-line:no-console
+    console.error(err);
+    throw new Error('can not delete on the database');
   }
 };
 /**

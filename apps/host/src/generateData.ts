@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const profile = {
-  id: `${process.env.BASE_URL}/profiles/auth0|5e52fda734ae9a0d48135fa5`,
+  id: `${process.env.BASE_URL}/profiles/test`,
   type: 'Profile',
   '@context': 'https://w3id.org/openbadges/v2',
   description: 'Test user',

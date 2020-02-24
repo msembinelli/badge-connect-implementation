@@ -42,36 +42,6 @@ export function validateCreateConsent(
     });
   }
 
-  if (!body.Data.ExpirationDateTime) {
-    return res.status(400).send({
-      status: {
-        error: 'Data.ExpirationDateTime is required.',
-        statusCode: 400,
-        statusText: 'BAD_REQUEST'
-      }
-    });
-  }
-
-  if (!body.Data.TransactionFromDateTime) {
-    return res.status(400).send({
-      status: {
-        error: 'Data.TransactionFromDateTime is required.',
-        statusCode: 400,
-        statusText: 'BAD_REQUEST'
-      }
-    });
-  }
-
-  if (!body.Data.TransactionToDateTime) {
-    return res.status(400).send({
-      status: {
-        error: 'Data.TransactionToDateTime is required.',
-        statusCode: 400,
-        statusText: 'BAD_REQUEST'
-      }
-    });
-  }
-
   if (!body.Risk) {
     return res.status(400).send({
       status: {

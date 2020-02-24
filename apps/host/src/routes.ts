@@ -15,7 +15,7 @@ router.get('/.well-known/openatbaccounts.json', Manifest.wellKnown);
 // Account access consents
 router.post(
   '/account-access-consents',
-  verifyToken,
+  checkAccessToken,
   Consent.validateCreateConsent,
   Consent.createConsent
 );

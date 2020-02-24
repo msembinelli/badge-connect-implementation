@@ -23,6 +23,7 @@ export const register = async (req: Request, res, next) => {
 
     // binding the needed parameters for registration from the badge connect manifest
     issuer.jwks_uri = process.env.JWKS_ENDPOINT;
+    issuer.userinfo_endpoint = process.env.USERINFO_ENDPOINT;
     issuer.token_endpoint = issuer.openAtbAccountsAPI[0].tokenUrl;
     issuer.authorization_endpoint =
       issuer.openAtbAccountsAPI[0].authorizationUrl;
@@ -51,7 +52,8 @@ export const register = async (req: Request, res, next) => {
       policy_uri: process.env.POLICY_URI,
       logo_uri: process.env.LOGO_URI,
       client_uri: process.env.CLIENT_URI,
-      client_name: process.env.CLIENT_NAME
+      client_name: process.env.CLIENT_NAME,
+      userinfo_endpoint: process.env.USERINFO_ENDPOINT
 
       // application_type: 'web',
       // token_endpoint_auth_method: 'client_secret_basic'

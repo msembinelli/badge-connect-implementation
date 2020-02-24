@@ -1,6 +1,5 @@
 export interface IProfile {
-  firstName: string;
-  lastName: string;
+  name: string;
   photo: string;
   jobTitle: string;
   password: string;

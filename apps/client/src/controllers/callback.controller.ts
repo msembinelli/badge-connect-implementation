@@ -1,7 +1,9 @@
-import { getById, saveDB, getOneWhere } from '../utils/mongo';
+import { getById, saveDB, getOneWhere, removeOne } from '../utils/mongo';
 import { Issuer, custom } from 'openid-client';
 import { Response } from 'express';
 import fetch from 'node-fetch';
+import { IProfile } from '../types/profile.type';
+import * as faker from 'faker';
 
 custom.setHttpOptionsDefaults({
   timeout: 50000
@@ -49,9 +51,25 @@ export const callback = async (req: any, res: Response, next) => {
         response_type: 'code'
       });
 
-      console.log('getting user info');
       // get the user profile
-      // const userinfo = await client.userinfo(tokenSet);
+      console.log(client);
+      const userinfo = await client.userinfo(tokenSet);
+      console.log('got user info', userinfo);
+
+      const profile: IProfile = {
+        name: userinfo.name,
+        photo: userinfo.picture,
+        jobTitle: 'ATB Customer',
+        password: faker.internet.password(),
+        id: userinfo.sub,
+        email: userinfo.email
+      };
+
+      const prof = await getOneWhere({ _id: profile.id }, 'profiles');
+      if (prof.email) {
+        await removeOne({ _id: profile.id }, 'profiles');
+      }
+      await saveDB({ ...profile, _id: profile.id }, 'profiles');
 
       console.log('adding the hostProfiles and accessTokens to the database');
 
@@ -60,7 +78,7 @@ export const callback = async (req: any, res: Response, next) => {
         saveDB({ ...tokenSet, uid, clientInternalId: id }, 'accessTokens')
       ]);
 
-      req.apiBase = wellKnownMetadata.badgeConnectAPI[0].apiBase;
+      req.apiBase = wellKnownMetadata.openAtbAccountsAPI[0].apiBase;
       req.uid = uid;
       req.tokenSet = tokenSet;
     }
@@ -72,40 +90,55 @@ export const callback = async (req: any, res: Response, next) => {
   }
 };
 
-export const getAssertions = async (req: any, res: any, next) => {
+export const createConsent = async (req: any, res: any, next) => {
   try {
-    console.log('getting initial assertions');
-    console.log(req.tokenSet.access_token);
+    console.log('creating initial account-access-consent');
+    // console.log(req.tokenSet.access_token);
 
-    const response = await fetch(
-      `${req.apiBase}/assertions?limit=11&offset=0`,
-      {
-        method: 'GET',
-        headers: { Authorization: 'Bearer ' + req.tokenSet.access_token }
-      }
-    );
+    const response = await fetch(`${req.apiBase}/account-access-consents`, {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + req.tokenSet.access_token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        Data: {
+          Permissions: [
+            'ReadAccountsDetail',
+            'ReadBalances',
+            'ReadBeneficiariesDetail',
+            'ReadDirectDebits',
+            'ReadProducts',
+            'ReadStandingOrdersDetail',
+            'ReadTransactionsCredits',
+            'ReadTransactionsDebits',
+            'ReadTransactionsDetail',
+            'ReadOffers',
+            'ReadPAN',
+            'ReadParty',
+            'ReadPartyPSU',
+            'ReadScheduledPaymentsDetail',
+            'ReadStatementsDetail'
+          ],
+          ExpirationDateTime: '',
+          TransactionFromDateTime: '',
+          TransactionToDateTime: ''
+        },
+        Risk: {}
+      })
+    });
 
     const data = await response.json();
 
-    console.log('assertions response', data);
+    console.log('consent response', data);
 
     // TODO loop and get all the assertions
-    console.log('saving the assertions into the database');
-    for (const assertion of data.results) {
-      assertion.uid = req.uid;
-      assertion.client_id = req.params.id;
+    console.log('saving the consent into the database');
 
-      if (typeof assertion.badge === 'string') {
-        const object = await fetch(assertion.badge);
-        assertion.badge = await object.json();
-      }
-
-      console.log(assertion);
-      await saveDB(assertion, 'assertions');
-    }
+    await saveDB(data, 'consents');
   } catch (error) {
     console.error(error);
-    res.status(400).send('failed to fetch assertions using the access token');
+    res.status(400).send('failed to fetch consent using the access token');
   }
 
   next();
