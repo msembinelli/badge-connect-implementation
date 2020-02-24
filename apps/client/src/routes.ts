@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as registerController from './controllers/register.controller';
 import * as profileController from './controllers/profile.controller';
 import * as callbackController from './controllers/callback.controller';
+import * as consentController from './controllers/consent.controller';
 
 const router = express.Router();
 
@@ -30,5 +31,15 @@ router.post('/profile', profileController.generate);
 router.post('/redirect', profileController.redirect);
 
 // router.get('/view', (req, res) => res.render('profile'));
+
+// Consent
+router.get(
+  '/consent/callback/:id',
+  consentController.clientCredentialGrant,
+  consentController.createConsent,
+  consentController.redirect
+);
+
+router.post('/consent/redirect', consentController.redirect);
 
 export default router;

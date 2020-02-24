@@ -19,7 +19,7 @@ export const provider = async () => {
   const oidc = new Provider(process.env.BASE_URL, {
     adapter: MongoAdapter, // the adapter to use later on ,
     clientDefaults: {
-      grant_types: ['authorization_code'], // , 'refresh_token'
+      grant_types: ['authorization_code', 'client_credentials'], // , 'refresh_token'
       response_types: ['code'],
       token_endpoint_auth_method: 'client_secret_basic'
     },
@@ -33,7 +33,8 @@ export const provider = async () => {
       registration: { enabled: true },
       registrationManagement: { enabled: true },
       revocation: { enabled: true },
-      userinfo: { enabled: true }
+      userinfo: { enabled: true },
+      clientCredentials: { enabled: true }
     },
     // passing it our Account model method is sufficient, it should return a Promise that resolves
     // with an object with accountId property and a claims method.
