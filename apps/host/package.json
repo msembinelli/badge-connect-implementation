@@ -42,6 +42,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.3.5",
     "mongoose": "^5.7.13",
+    "nanoid": "^2.1.11",
     "validator": "^12.1.0"
   }
 }

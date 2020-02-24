@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import access_token from '../models/access_token.model.';
+import access_token from '../models/access_token.model';
 import profile from '../models/profile.model';
 
 export const checkAccessToken = async (req: any, res: Response, next) => {
@@ -22,6 +22,7 @@ export const checkAccessToken = async (req: any, res: Response, next) => {
       const accessToken = await access_token.findOne({
         id: token
       });
+      console.log(accessToken);
 
       if (!accessToken) {
         res.status(401).send({

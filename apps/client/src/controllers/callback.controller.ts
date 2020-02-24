@@ -75,6 +75,7 @@ export const callback = async (req: any, res: Response, next) => {
 export const getAssertions = async (req: any, res: any, next) => {
   try {
     console.log('getting initial assertions');
+    console.log(req.tokenSet.access_token);
 
     const response = await fetch(
       `${req.apiBase}/assertions?limit=11&offset=0`,

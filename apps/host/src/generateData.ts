@@ -1,4 +1,4 @@
-import Assertion from './models/assertion.model';
+/*import Assertion from './models/consent.model';
 import Profile from './models/profile.model';
 
 import dotenv from 'dotenv';
@@ -63,4 +63,4 @@ export const generateData = async () => {
   } catch (error) {
     console.error(error);
   }
-};
+};*/

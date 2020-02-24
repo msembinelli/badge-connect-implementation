@@ -1,4 +1,4 @@
-export interface IBadgeConnectAPI {
+export interface IOpenAtbAccountsAPI {
   id: string;
   type: string;
   apiBase: string;
@@ -18,15 +18,12 @@ export interface IBadgeConnectAPI {
 export interface IManifestResponse {
   id: string;
   type: string;
-  badgeConnectAPI: IBadgeConnectAPI[];
+  openAtbAccountsAPI: IOpenAtbAccountsAPI[];
 }
 
 export type scope =
   | 'openid'
   | 'profile'
-  | 'https://purl.imsglobal.org/spec/ob/v2p1/scope/assertion.readonly'
-  | 'https://purl.imsglobal.org/spec/ob/v2p1/scope/assertion.create'
-  | 'https://purl.imsglobal.org/spec/ob/v2p1/scope/profile.readonly'
-  | 'https://purl.imsglobal.org/spec/ob/v2p1/scope/profile.update'
   | 'offline_access'
-  | 'email';
+  | 'email'
+  | 'accounts';

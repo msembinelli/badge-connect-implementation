@@ -23,10 +23,11 @@ export const register = async (req: Request, res, next) => {
 
     // binding the needed parameters for registration from the badge connect manifest
     issuer.jwks_uri = process.env.JWKS_ENDPOINT;
-    issuer.token_endpoint = issuer.badgeConnectAPI[0].tokenUrl;
-    issuer.authorization_endpoint = issuer.badgeConnectAPI[0].authorizationUrl;
-    issuer.registration_endpoint = issuer.badgeConnectAPI[0].registrationUrl;
-    issuer.issuer = issuer.badgeConnectAPI[0].apiBase;
+    issuer.token_endpoint = issuer.openAtbAccountsAPI[0].tokenUrl;
+    issuer.authorization_endpoint =
+      issuer.openAtbAccountsAPI[0].authorizationUrl;
+    issuer.registration_endpoint = issuer.openAtbAccountsAPI[0].registrationUrl;
+    issuer.issuer = issuer.openAtbAccountsAPI[0].apiBase;
 
     // generate the state and internal id for the host
     const [{ insertedId: id }] = await Promise.all([

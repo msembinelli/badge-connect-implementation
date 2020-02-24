@@ -2,27 +2,27 @@ import * as express from 'express';
 
 import * as Manifest from './controllers/manifest.controller';
 import * as Profile from './controllers/profile.controller';
-import * as Assertion from './controllers/assertion.controller';
-import * as Setup from './generateData';
+import * as Consent from './controllers/consent.controller';
+// import * as Setup from './generateData';
 import verifyToken from './utils/verifyToken';
 import { checkAccessToken } from './utils/checkAccessToken';
 
 const router = express.Router();
 
 router.get('/health', (req, res) => res.status(200).send());
-router.get('/.well-known/badgeconnect.json', Manifest.wellKnown);
+router.get('/.well-known/openatbaccounts.json', Manifest.wellKnown);
 
-// Assertion
+// Account access consents
 router.post(
-  '/assertions',
+  '/account-access-consents',
   verifyToken,
-  Assertion.validateCreateAssertion,
-  Assertion.createAssertion
+  Consent.validateCreateConsent,
+  Consent.createConsent
 );
 
-router.get('/assertions', checkAccessToken, Assertion.findAssertions);
+router.get('/accounts-access-consents/:consentId', Consent.getConsent);
 
-router.get('/assertion/:orgId/:badgeId/:uid', Assertion.getSingleAssertion);
+router.delete('/accounts-access-consents/:consentId', Consent.deleteConsent);
 
 // Profile
 router.post(
@@ -32,6 +32,6 @@ router.post(
   Profile.createProfile
 );
 router.get('/profile', checkAccessToken, Profile.findProfile);
-router.post('/dev/setup', Setup.middleware);
+// router.post('/dev/setup', Setup.middleware);
 
 export default router;

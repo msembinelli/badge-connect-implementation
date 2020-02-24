@@ -68,7 +68,7 @@ const getClient = async (wellKnownMap, i, uid, host, req) => {
   await saveDB({ code_verifier, code_challenge, uid, state }, 'state');
 
   i.authUrl = authUrl;
-  i.name = wellKnownMap[i._id].badgeConnectAPI[0].name;
+  i.name = wellKnownMap[i._id].openAtbAccountsAPI[0].name;
   return i;
 };
 export const generate = async (req, res) => {
