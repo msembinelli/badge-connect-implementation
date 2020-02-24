@@ -6,7 +6,7 @@ import * as Consent from './controllers/consent.controller';
 // import * as Setup from './generateData';
 import verifyToken from './utils/verifyToken';
 import { checkAccessToken } from './utils/checkAccessToken';
-
+import { checkClientCredential } from './utils/checkClientCredential';
 const router = express.Router();
 
 router.get('/health', (req, res) => res.status(200).send());
@@ -15,7 +15,7 @@ router.get('/.well-known/openatbaccounts.json', Manifest.wellKnown);
 // Account access consents
 router.post(
   '/account-access-consents',
-  checkAccessToken,
+  checkClientCredential,
   Consent.validateCreateConsent,
   Consent.createConsent
 );

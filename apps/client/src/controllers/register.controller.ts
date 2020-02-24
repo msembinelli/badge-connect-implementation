@@ -40,12 +40,16 @@ export const register = async (req: Request, res, next) => {
       req.headers.host
     }/callback/${id}`;
 
+    const redirect_uri_consent = `${req.secure ? 'https' : 'http'}://${
+      req.headers.host
+    }/consent/callback/${id}`;
+
     // TODO report typing error
     const Client: any = issuer.Client;
     // register the client
     const client = await Client.register({
       ...issuer.metadata,
-      redirect_uris: [redirect_uri],
+      redirect_uris: [redirect_uri, redirect_uri_consent],
       software_id: process.env.SOFTWARE_ID,
       software_version: process.env.SOFTWARE_VERSION,
       tos_uri: process.env.TOS_URI,

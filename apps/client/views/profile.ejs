@@ -92,10 +92,10 @@
           </form>
           <form action="/consent/redirect" method="post" class="form-group">
             <span>Connect with</span>
-            <select name="selectedClient">
+            <select name="selectedClientGrantId">
               <% if (clients && clients.length) { for (let i = 0; i <
                                         clients.length; i++) { %>
-              <option value="<%= clients[i].authUrl %>">
+              <option value="<%= clients[i]._id %>">
                 <%= clients[i].name %>
               </option>
               <% }} %>

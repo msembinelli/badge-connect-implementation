@@ -1,5 +1,6 @@
 import { saveDB, getById } from '../utils/mongo';
 import { Issuer, custom } from 'openid-client';
+import fetch from 'node-fetch';
 
 export const clientCredentialGrant = async (req: any, res: any, next) => {
   const { id } = req.params;
@@ -8,7 +9,7 @@ export const clientCredentialGrant = async (req: any, res: any, next) => {
       req.headers.host
     }/consent/callback/${id}`;
 
-    console.log('getting client and wellKnow from db');
+    console.log('getting client and wellKnow from db', id);
 
     // get both the client and wellKnown from the database
     const [wellKnownMetadata, clientMetadata] = await Promise.all([
@@ -22,12 +23,29 @@ export const clientCredentialGrant = async (req: any, res: any, next) => {
     const client = new issuer.Client(clientMetadata);
 
     // get the request params for use with the callback
-    const params = client.callbackParams(req);
+    // const params = client.callbackParams(req);
+    // console.log(params);
 
-    const response = await client.grant({
+    console.log('client credential grant');
+    const tokenSet = await client.grant({
       grant_type: 'client_credentials'
     });
-    console.log(response);
+    console.log(tokenSet);
+
+    await Promise.all([
+      // saveDB({ ...userinfo, uid, clientInternalId: id }, 'hostProfiles'),
+      // user id as TPP software ID
+      saveDB(
+        { ...tokenSet, uid: process.env.SOFTWARE_ID, clientInternalId: id },
+        'accessTokens'
+      )
+    ]);
+
+    req.apiBase = wellKnownMetadata.openAtbAccountsAPI[0].apiBase;
+    req.tokenSet = tokenSet;
+    req.uid = req.uid;
+
+    next();
   } catch (error) {
     console.error(error);
     res.status(400).send('client credential flow failed');
@@ -36,7 +54,7 @@ export const clientCredentialGrant = async (req: any, res: any, next) => {
 
 export const createConsent = async (req: any, res: any, next) => {
   try {
-    console.log('creating initial account-access-consent');
+    console.log('CONSENT CONTROLLER: creating initial account-access-consent');
     // console.log(req.tokenSet.access_token);
 
     const response = await fetch(`${req.apiBase}/account-access-consents`, {
@@ -89,7 +107,11 @@ export const createConsent = async (req: any, res: any, next) => {
 };
 
 export const redirect = (req, res) => {
-  const { selectedClient } = req.body;
-  console.log(selectedClient);
-  res.redirect(selectedClient);
+  const { selectedClientGrantId } = req.body;
+  console.log(selectedClientGrantId);
+  res.redirect(`/consent/callback/${selectedClientGrantId}`);
+};
+
+export const callback = (req, res) => {
+  return res.redirect(`${req.headers.referer}`);
 };

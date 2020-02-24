@@ -37,7 +37,7 @@ router.get(
   '/consent/callback/:id',
   consentController.clientCredentialGrant,
   consentController.createConsent,
-  consentController.redirect
+  consentController.callback
 );
 
 router.post('/consent/redirect', consentController.redirect);

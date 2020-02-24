@@ -11,7 +11,7 @@ custom.setHttpOptionsDefaults({
 
 export const callback = async (req: any, res: Response, next) => {
   const { id } = req.params;
-
+  console.log('callback id', id);
   try {
     const redirect_uri = `${req.secure ? 'https' : 'http'}://${
       req.headers.host

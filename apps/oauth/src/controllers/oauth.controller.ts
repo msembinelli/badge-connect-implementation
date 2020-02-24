@@ -2,7 +2,6 @@ import assert from 'assert';
 import Provider from 'oidc-provider';
 import MongoAdapter from '../adapters/mongodb';
 import { Account } from './../services/account.service';
-import querystring from 'querystring';
 import { Issuer } from 'openid-client';
 import crypto from 'crypto';
 
