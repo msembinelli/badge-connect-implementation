@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const profile = {
-  id: `${process.env.BASE_URL}/profiles/23121d3c-84df-44ac-b458-3d63a9a05497`,
+  id: `${process.env.BASE_URL}/profiles/auth0|5e52fda734ae9a0d48135fa5`,
   type: 'Profile',
   '@context': 'https://w3id.org/openbadges/v2',
   description: 'Test user',
@@ -40,7 +40,7 @@ export const middleware = async (req, res) => {
 export const generateData = async () => {
   try {
     const _profile = await Profile.findOne({
-      id: `${process.env.BASE_URL}/profiles/23121d3c-84df-44ac-b458-3d63a9a05497`
+      id: `${process.env.BASE_URL}/profiles/auth0|5e52fda734ae9a0d48135fa5`
     });
 
     if (_profile) {
@@ -51,8 +51,7 @@ export const generateData = async () => {
     }
 
     const _assertion = await Assertion.findOne({
-      id:
-        `${process.env.BASE_URL}/assertion/B1pzF8uCz/sk4nLu0n7a0eRC84iG3I/LlXtf36AK5hsjTm4kiHDvYe1leC3`
+      id: `${process.env.BASE_URL}/assertion/B1pzF8uCz/sk4nLu0n7a0eRC84iG3I/LlXtf36AK5hsjTm4kiHDvYe1leC3`
     });
 
     if (_assertion) {

@@ -1,12 +1,11 @@
 // TODO Add env variables for both JWKS and views folder
 
-import * as bodyParser from 'body-parser';
-
 import * as path from 'path';
 
 import express from 'express';
+import cookieParser from 'cookie-parser';
 
-import { callback } from './controllers/oauth.controller';
+import { provider } from './controllers/oauth.controller';
 import router from './routes';
 
 class App {
@@ -17,9 +16,8 @@ class App {
     this.config();
   }
 
-  private config(): void {
-    // this.app.use(bodyParser.json());
-    // this.app.use(bodyParser.urlencoded({ extended: false }));
+  private async config(): Promise<any> {
+    this.app.use(cookieParser());
     // let's work with express here, below is just the interaction definition
     this.app.set('trust proxy', true);
     this.app.set('view engine', 'ejs');
@@ -44,6 +42,7 @@ class App {
       next();
     });
     this.app.use(router);
+    const callback = (await provider()).callback;
     this.app.use(callback);
   }
 }
