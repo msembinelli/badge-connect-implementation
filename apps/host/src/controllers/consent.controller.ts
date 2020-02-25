@@ -96,7 +96,7 @@ export async function createConsent(req: Request, res: Response) {
       ...req.body,
       Data: {
         ...req.body.Data,
-        ConsentId: `urn-atb-intent-${nanoid(64)}`,
+        ConsentId: `urn-atb-intent-${nanoid(32)}`,
         Status: 'AwaitingAuthorisation',
         StatusUpdateDateTime: date.toISOString(),
         CreationDateTime: date.toISOString()
@@ -118,7 +118,7 @@ export async function createConsent(req: Request, res: Response) {
       }
     };
 
-    return res.status(200).json(response);
+    return res.status(201).json(response);
   } catch (error) {
     res.status(400).send({
       status: {

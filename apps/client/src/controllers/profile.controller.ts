@@ -12,7 +12,7 @@ custom.setHttpOptionsDefaults({
 // TODO add model for the repsone of profile
 export const get = async (req: Request & { response: any }, res, next) => {
   const { id: uid } = req.params;
-  const [assertions, profile, clients, wellKnows] = await Promise.all([
+  const [consents, profile, clients, wellKnows] = await Promise.all([
     getWhere({ uid: uid }, 'consents'),
     getOneWhere({ id: uid }, 'profiles'),
     getWhere({}, 'clients'),
@@ -29,7 +29,7 @@ export const get = async (req: Request & { response: any }, res, next) => {
     clients.map(i => getClient(wellKnownMap, i, uid, req.headers.host, req))
   );
 
-  req.response = { profile, clients: items, assertions };
+  req.response = { profile, clients: items, consents };
 
   next();
 };
