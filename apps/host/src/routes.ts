@@ -20,9 +20,17 @@ router.post(
   Consent.createConsent
 );
 
-router.get('/accounts-access-consents/:consentId', Consent.getConsent);
+router.get(
+  '/accounts-access-consents/:consentId',
+  checkAccessToken,
+  Consent.getConsent
+);
 
-router.delete('/accounts-access-consents/:consentId', Consent.deleteConsent);
+router.delete(
+  '/accounts-access-consents/:consentId',
+  checkAccessToken,
+  Consent.deleteConsent
+);
 
 // Profile
 router.post(
